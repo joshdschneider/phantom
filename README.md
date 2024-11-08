@@ -1,6 +1,6 @@
 # Phantom
 
-AI that can use your computer alongside you. This app was bootstrapped with [electron-react-boilerplate](https://github.com/electron-react-boilerplate).
+AI assistant for your desktop. This app was bootstrapped with [electron-react-boilerplate](https://github.com/electron-react-boilerplate).
 
 ## Starting Development
 

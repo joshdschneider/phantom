@@ -1,6 +1,8 @@
 {
   "name": "phantom",
   "main": "./.erb/dll/main.bundle.dev.js",
+  "description": "AI assistant for your desktop.",
+  "author": "joshdschneider",
   "scripts": {
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
     "build:dll": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts",
@@ -69,7 +71,6 @@
   },
   "dependencies": {
     "@electron/notarize": "^2.3.2",
-    "@nut-tree-fork/nut-js": "^4.2.2",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.8",
     "electron-updater": "^6.1.4",

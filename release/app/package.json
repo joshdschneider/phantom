@@ -1,6 +1,8 @@
 {
   "name": "phantom",
   "version": "0.1.0",
+  "description": "AI assistant for your desktop.",
+  "author": "joshdschneider",
   "main": "./dist/main/main.js",
   "scripts": {
     "rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",
