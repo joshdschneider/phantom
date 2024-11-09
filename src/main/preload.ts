@@ -3,11 +3,12 @@ import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 export type Channel =
   | 'resize-window'
   | 'get-sources'
+  | 'show-context-menu'
   | 'mouse:move'
-  | 'mouse:leftClick'
-  | 'mouse:rightClick'
+  | 'mouse:left-click'
+  | 'mouse:right-click'
   | 'keyboard:type'
-  | 'keyboard:pressKey';
+  | 'keyboard:press-key';
 
 const electronHandler = {
   ipcRenderer: {

@@ -1,5 +1,5 @@
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, screen } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -14,6 +14,13 @@ import {
   mouseRightClickHandler,
 } from './handlers/automation';
 import { getSourcesHandler } from './handlers/sources';
+import {
+  DEFAULT_WINDOW_HEIGHT,
+  DEFAULT_WINDOW_WIDTH,
+  DEFAULT_WINDOW_X,
+  DEFAULT_WINDOW_Y,
+} from './constants';
+import { handleShowContextMenu } from './handlers/menu';
 
 class AppUpdater {
   constructor() {
@@ -64,12 +71,18 @@ const createWindow = async () => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const { width } = primaryDisplay.workAreaSize;
+
   mainWindow = new BrowserWindow({
     show: false,
     frame: false,
     movable: true,
-    width: 460,
-    height: 100,
+    resizable: false,
+    width: DEFAULT_WINDOW_WIDTH,
+    height: DEFAULT_WINDOW_HEIGHT,
+    x: width - DEFAULT_WINDOW_WIDTH - DEFAULT_WINDOW_X,
+    y: DEFAULT_WINDOW_Y,
     transparent: true,
     hasShadow: true,
     icon: getAssetPath('icon.png'),
@@ -137,10 +150,13 @@ ipcMain.handle('get-sources', getSourcesHandler);
 
 // Automation handlers
 ipcMain.handle('mouse:move', mouseMoveHandler);
-ipcMain.handle('mouse:leftClick', mouseLeftClickHandler);
-ipcMain.handle('mouse:rightClick', mouseRightClickHandler);
+ipcMain.handle('mouse:left-click', mouseLeftClickHandler);
+ipcMain.handle('mouse:right-click', mouseRightClickHandler);
 ipcMain.handle('keyboard:type', keyboardTypeHandler);
-ipcMain.handle('keyboard:pressKey', keyboardPressKeyHandler);
+ipcMain.handle('keyboard:press-key', keyboardPressKeyHandler);
+
+// Handle context menu
+ipcMain.handle('show-context-menu', handleShowContextMenu);
 
 // Cleanup on quit
 app.on('before-quit', () => {

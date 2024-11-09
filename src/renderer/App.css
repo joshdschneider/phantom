@@ -38,7 +38,7 @@ body {
   height: 100vh;
 }
 
-main {
+.base-container {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -143,15 +143,22 @@ main {
   background: #0064d1;
 }
 
-.feature-buttons {
+.controls {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   height: 25px;
   margin: 5px 10px;
   padding-bottom: 5px;
   gap: 2px;
   width: calc(100vw - 20px);
+}
+
+.feature-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2px;
 }
 
 .feature-buttons button {
@@ -169,5 +176,61 @@ main {
 }
 
 .feature-buttons button:hover {
+  color: var(--text-color);
+}
+
+.answer-container {
+  display: block;
+  width: calc(100% - 10px);
+  margin: 5px;
+  height: 100%;
+  border-radius: 7px;
+  position: relative;
+  overflow-y: auto;
+}
+
+.answer-container .button-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 15px;
+  right: 13px;
+}
+
+.stop-button {
+  background: #fe5f57;
+}
+
+.stop-button svg {
+  color: white;
+  width: 12px;
+}
+
+.stop-button:active {
+  background: #cf473f;
+}
+
+.context-menu {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.context-menu button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  border: none;
+  gap: 6px;
+  padding: 7px 11px;
+  color: #606060;
+  font-family: 'SF Pro';
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.context-menu button:hover {
   color: var(--text-color);
 }
