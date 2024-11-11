@@ -1,9 +1,10 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { AppProps } from '../App';
 
-export const TaskSelect: React.FC<{
-  setStep: Dispatch<SetStateAction<string>>;
-}> = ({ setStep }) => {
+type CaptureSelectProps = AppProps & {};
+
+export const CaptureSelect: React.FC<CaptureSelectProps> = ({ setStep }) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -32,7 +33,7 @@ export const TaskSelect: React.FC<{
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
-              alignItems: 'center',
+              alignItems: 'center'
             }}
           >
             <div>Task</div>

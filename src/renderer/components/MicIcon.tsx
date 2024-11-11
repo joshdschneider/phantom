@@ -2,14 +2,7 @@ import { CSSProperties } from 'react';
 
 export const MicIcon: React.FC<{ style?: CSSProperties }> = ({ style }) => {
   return (
-    <svg
-      width="9"
-      height="15"
-      viewBox="0 0 9 15"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      style={style}
-    >
+    <svg width="9" height="15" viewBox="0 0 9 15" fill="none" xmlns="http://www.w3.org/2000/svg" style={style}>
       <path
         d="M7.95221 5.6123V6.9982C7.95188 7.95444 7.56445 8.81777 6.9361 9.4471C6.30671 10.0755 5.44371 10.4629 4.48748 10.4629C3.53124 10.4629 2.66788 10.0755 2.03852 9.4471C1.41017 8.81777 1.02277 7.95441 1.02243 6.9982V5.6123H0V6.9982C0.000978486 9.301 1.74101 11.1992 3.97629 11.4541V13.4051H2.66995V14.314H6.30508V13.4051H4.99875V11.4541C7.23367 11.1991 8.97369 9.301 8.9747 6.9982V5.6123H7.95221Z"
         fill="currentColor"

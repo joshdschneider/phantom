@@ -1,7 +1,7 @@
 /* eslint import/prefer-default-export: off */
-import { URL } from 'url';
-import path from 'path';
 import { Key } from '@nut-tree/nut-js';
+import path from 'path';
+import { URL } from 'url';
 
 export function resolveHtmlPath(htmlFileName: string) {
   if (process.env.NODE_ENV === 'development') {
@@ -115,5 +115,5 @@ export const keyMap = {
   Scroll_Lock: Key.ScrollLock,
   Print: Key.Print,
   Pause: Key.Pause,
-  Menu: Key.Menu,
+  Menu: Key.Menu
 };

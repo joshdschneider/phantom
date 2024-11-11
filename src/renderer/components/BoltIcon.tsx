@@ -2,14 +2,7 @@ import { CSSProperties } from 'react';
 
 export const BoltIcon: React.FC<{ style?: CSSProperties }> = ({ style }) => {
   return (
-    <svg
-      width="11"
-      height="14"
-      viewBox="0 0 11 14"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      style={style}
-    >
+    <svg width="11" height="14" viewBox="0 0 11 14" fill="none" xmlns="http://www.w3.org/2000/svg" style={style}>
       <path
         fillRule="evenodd"
         clipRule="evenodd"

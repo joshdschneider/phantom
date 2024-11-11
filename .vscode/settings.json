@@ -4,13 +4,16 @@
     ".prettierrc": "jsonc",
     ".eslintignore": "ignore"
   },
-  
+
   "eslint.validate": [
     "javascript",
     "javascriptreact",
     "html",
     "typescriptreact"
   ],
+
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.configPath": ".prettierrc",
 
   "javascript.validate.enable": false,
   "javascript.format.enable": false,

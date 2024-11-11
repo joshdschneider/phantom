@@ -1,28 +1,22 @@
-import path from 'path';
-import { app, BrowserWindow, shell, ipcMain, screen } from 'electron';
-import { autoUpdater } from 'electron-updater';
+import { useBoltInputMonitor } from '@nut-tree/bolt';
+import { mouse, MouseDownEvent, MouseUpEvent, system } from '@nut-tree/nut-js';
+import { app, BrowserWindow, ipcMain, screen, shell } from 'electron';
 import log from 'electron-log';
-import MenuBuilder from './menu';
-import { resolveHtmlPath } from './util';
-import _ from 'lodash';
+import { autoUpdater } from 'electron-updater';
+import path from 'path';
 import { WindowAnimator } from './animator';
+import { DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_X, DEFAULT_WINDOW_Y } from './constants';
 import {
   keyboardPressKeyHandler,
   keyboardTypeHandler,
   mouseLeftClickHandler,
   mouseMoveHandler,
-  mouseRightClickHandler,
+  mouseRightClickHandler
 } from './handlers/automation';
-import { getSourcesHandler } from './handlers/sources';
-import {
-  DEFAULT_WINDOW_HEIGHT,
-  DEFAULT_WINDOW_WIDTH,
-  DEFAULT_WINDOW_X,
-  DEFAULT_WINDOW_Y,
-} from './constants';
 import { handleShowContextMenu } from './handlers/menu';
-import { useBoltInputMonitor } from '@nut-tree/bolt';
-import { system, mouse, MouseUpEvent, MouseDownEvent } from '@nut-tree/nut-js';
+import { getSourcesHandler } from './handlers/sources';
+import MenuBuilder from './menu';
+import { resolveHtmlPath } from './util';
 
 class AppUpdater {
   constructor() {
@@ -40,8 +34,7 @@ if (process.env.NODE_ENV === 'production') {
   sourceMapSupport.install();
 }
 
-const isDebug =
-  process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
+const isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
 if (isDebug) {
   require('electron-debug')();
@@ -55,7 +48,7 @@ const installExtensions = async () => {
   return installer
     .default(
       extensions.map((name) => installer[name]),
-      forceDownload,
+      forceDownload
     )
     .catch(console.log);
 };
@@ -89,10 +82,8 @@ const createWindow = async () => {
     hasShadow: true,
     icon: getAssetPath('icon.png'),
     webPreferences: {
-      preload: app.isPackaged
-        ? path.join(__dirname, 'preload.js')
-        : path.join(__dirname, '../../.erb/dll/preload.js'),
-    },
+      preload: app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../.erb/dll/preload.js')
+    }
   });
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));

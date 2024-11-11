@@ -19,7 +19,7 @@ export class WindowAnimator {
     stiffness: 300, // Higher values = stiffer spring
     damping: 25, // Higher values = more damping
     mass: 1, // Higher values = more inertia
-    precision: 0.1, // Lower values = more precise end position
+    precision: 0.1 // Lower values = more precise end position
   };
 
   constructor(window: BrowserWindow, config?: Partial<SpringConfig>) {
@@ -63,41 +63,23 @@ export class WindowAnimator {
       const deltaTime = (currentTime - this.lastTime) / 1000; // Convert to seconds
       this.lastTime = currentTime;
 
-      // Calculate spring force using Hooke's law: F = -kx
       const displacement = this.currentHeight - this.targetHeight;
       const springForce = -this.config.stiffness * displacement;
 
-      // Calculate damping force: F = -cv
       const dampingForce = -this.config.damping * this.velocity;
-
-      // Calculate acceleration: F = ma
       const acceleration = (springForce + dampingForce) / this.config.mass;
 
-      // Update velocity: v = v0 + at
       this.velocity += acceleration * deltaTime;
-
-      // Update position: x = x0 + vt
       this.currentHeight += this.velocity * deltaTime;
+      this.window.setSize(this.window.getSize()[0], Math.round(this.currentHeight));
 
-      // Update window size
-      this.window.setSize(
-        this.window.getSize()[0],
-        Math.round(this.currentHeight),
-      );
-
-      // Check if animation should continue
       const isMoving = Math.abs(this.velocity) > this.config.precision;
       const isAtTarget = Math.abs(displacement) > this.config.precision;
 
       if (isMoving || isAtTarget) {
-        // Continue animation
         this.animationFrameId = setTimeout(update, 1000 / 60); // Target 60 FPS
       } else {
-        // End animation
-        this.window.setSize(
-          this.window.getSize()[0],
-          Math.round(this.targetHeight),
-        );
+        this.window.setSize(this.window.getSize()[0], Math.round(this.targetHeight));
         this.currentHeight = this.targetHeight;
         this.velocity = 0;
         this.animationFrameId = null;
