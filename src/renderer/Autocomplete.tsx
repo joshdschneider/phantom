@@ -1,22 +1,66 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { TextStreamer } from './components/TextStreamer';
+import { StopIcon } from './components/StopIcon';
+import { useElectronEvent } from './hooks/useElectronEvent';
 
 export const Autocomplete: React.FC<{
   setStep: Dispatch<SetStateAction<string>>;
 }> = ({ setStep }) => {
   const [visible, setVisible] = useState(false);
+  const [text, setText] = useState('Select an editable area on your screen');
 
   useEffect(() => {
-    window.electron.ipcRenderer.invoke('resize-window', { height: 150 });
+    window.electron.ipcRenderer.invoke('resize-window', {
+      height: 61,
+    });
+    window.electron.ipcRenderer.invoke('set-always-on-top', {
+      alwaysOnTop: true,
+    });
+    window.electron.ipcRenderer.invoke('start-monitoring-input-events');
 
-    setTimeout(() => {
+    let timeout;
+    timeout = setTimeout(() => {
       setVisible(true);
     }, 150);
+
+    return () => {
+      clearTimeout(timeout);
+      window.electron.ipcRenderer.invoke('set-always-on-top', {
+        alwaysOnTop: false,
+      });
+      window.electron.ipcRenderer.invoke('stop-monitoring-input-events');
+    };
   }, []);
 
-  const handleStep = () => {
-    setStep('home');
-  };
+  const handleMouseMove = useCallback(
+    (data: {
+      type: 'mouseUp';
+      targetPoint: {
+        x: number;
+        y: number;
+      };
+    }) => {
+      console.log(
+        `Mouse moved to: x=${data.targetPoint.x}, y=${data.targetPoint.y}`,
+      );
+    },
+    [],
+  );
+
+  useElectronEvent<{
+    type: 'mouseUp';
+    targetPoint: {
+      x: number;
+      y: number;
+    };
+  }>('mouse:up', handleMouseMove);
 
   return (
     <AnimatePresence>
@@ -28,18 +72,20 @@ export const Autocomplete: React.FC<{
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6 }}
             className="base-container"
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
           >
-            <div>Autocomplete</div>
-            <br />
-            <button className="non-draggable" onClick={handleStep}>
-              Back
-            </button>
+            <div className="autocomplete-container">
+              <div className="autocomplete">
+                <p>
+                  <TextStreamer text={text} />
+                </p>
+                <button
+                  className="cancel-button non-draggable"
+                  onClick={() => setStep('home')}
+                >
+                  <StopIcon />
+                </button>
+              </div>
+            </div>
           </motion.div>
         )}
       </main>

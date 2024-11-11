@@ -234,3 +234,69 @@ body {
 .context-menu button:hover {
   color: var(--text-color);
 }
+
+.autocomplete-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #d3d3d3, #ededed, #dcdcdc);
+  background-size: 200% 100%;
+  animation: gradient 1s ease-in-out infinite alternate;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.autocomplete {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  padding: 0 5px;
+}
+
+.autocomplete p {
+  margin: 0;
+  padding: 11px;
+  font-size: 18px;
+  line-height: 1.4;
+  font-family: var(--sf-pro-family);
+  color: var(--placeholder-color);
+  resize: none;
+}
+
+.autocomplete .cancel-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: none;
+  transition: 0.2s;
+  position: fixed;
+  top: 15px;
+  right: 13px;
+  color: var(--placeholder-color);
+  background: #fe5f57;
+}
+
+.autocomplete .cancel-button:active {
+  background: #cf473f;
+}
+
+.autocomplete .cancel-button svg {
+  color: white;
+  width: 12px;
+  height: auto;
+}

@@ -21,11 +21,18 @@ import { Autocomplete } from './Autocomplete';
 const Home: React.FC<{
   setStep: Dispatch<SetStateAction<string>>;
 }> = ({ setStep }) => {
+  const [visible, setVisible] = useState(false);
   const [text, setText] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    window.electron.ipcRenderer.invoke('resize-window', { height: 100 });
+
+    setTimeout(() => {
+      setVisible(true);
+    }, 150);
+
     document.documentElement.style.setProperty(
       '--sf-pro-font',
       `url(${sfProFont})`,
@@ -80,62 +87,67 @@ const Home: React.FC<{
   return (
     <AnimatePresence>
       <main className="base-container draggable">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="base-container"
-        >
-          <div className="input-container non-draggable" ref={containerRef}>
-            <textarea
-              ref={textareaRef}
-              value={text}
-              onChange={handleInput}
-              onKeyDown={handleKeyDown}
-              rows={1}
-              placeholder="What can I help with?"
-            />
-            <div className="button-group">
-              {text.length === 0 ? (
-                <button className="icon-button" onClick={recordAudio}>
-                  <MicIcon />
-                </button>
-              ) : (
+        {visible && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="base-container"
+          >
+            <div className="input-container non-draggable" ref={containerRef}>
+              <textarea
+                ref={textareaRef}
+                value={text}
+                onChange={handleInput}
+                onKeyDown={handleKeyDown}
+                rows={1}
+                placeholder="What can I help with?"
+              />
+              <div className="button-group">
+                {text.length === 0 ? (
+                  <button className="icon-button" onClick={recordAudio}>
+                    <MicIcon />
+                  </button>
+                ) : (
+                  <button
+                    className="icon-button submit-button"
+                    onClick={handleSubmit}
+                  >
+                    <ArrowRightIcon />
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="controls">
+              <div className="feature-buttons">
                 <button
-                  className="icon-button submit-button"
-                  onClick={handleSubmit}
+                  className="non-draggable"
+                  onClick={() => setStep('autocomplete')}
                 >
-                  <ArrowRightIcon />
+                  <InputIcon />
+                  <span>Autocomplete</span>
                 </button>
-              )}
+                <button
+                  className="non-draggable"
+                  onClick={() => setStep('task')}
+                >
+                  <BoltIcon />
+                  <span>Task</span>
+                </button>
+              </div>
+              <div className="context-menu">
+                <button
+                  className="non-draggable"
+                  onClick={() => {
+                    window.electron.ipcRenderer.invoke('show-context-menu');
+                  }}
+                >
+                  <DotsIcon />
+                </button>
+              </div>
             </div>
-          </div>
-          <div className="controls">
-            <div className="feature-buttons">
-              <button
-                className="non-draggable"
-                onClick={() => setStep('autocomplete')}
-              >
-                <InputIcon />
-                <span>Autocomplete</span>
-              </button>
-              <button className="non-draggable" onClick={() => setStep('task')}>
-                <BoltIcon />
-                <span>Task</span>
-              </button>
-            </div>
-            <div className="context-menu">
-              <button
-                className="non-draggable"
-                onClick={() => {
-                  window.electron.ipcRenderer.invoke('show-context-menu');
-                }}
-              >
-                <DotsIcon />
-              </button>
-            </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        )}
       </main>
     </AnimatePresence>
   );

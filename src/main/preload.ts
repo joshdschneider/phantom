@@ -4,7 +4,12 @@ export type Channel =
   | 'resize-window'
   | 'get-sources'
   | 'show-context-menu'
+  | 'set-always-on-top'
+  | 'start-monitoring-input-events'
+  | 'stop-monitoring-input-events'
   | 'mouse:move'
+  | 'mouse:up'
+  | 'mouse:down'
   | 'mouse:left-click'
   | 'mouse:right-click'
   | 'keyboard:type'
@@ -16,11 +21,11 @@ const electronHandler = {
       ipcRenderer.send(channel, ...args);
     },
     on(channel: Channel, func: (...args: unknown[]) => void) {
-      const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>
+      const listener = (_event: IpcRendererEvent, ...args: unknown[]) =>
         func(...args);
-      ipcRenderer.on(channel, subscription);
+      ipcRenderer.on(channel, listener);
       return () => {
-        ipcRenderer.removeListener(channel, subscription);
+        ipcRenderer.removeListener(channel, listener);
       };
     },
     once(channel: Channel, func: (...args: unknown[]) => void) {

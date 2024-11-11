@@ -1,7 +1,5 @@
-import { mouse, Point, keyboard } from '@nut-tree-fork/nut-js';
+import { mouse, Point, keyboard, Key, system } from '@nut-tree/nut-js';
 import { keyMap } from '../util';
-import { Button } from '@nut-tree-fork/nut-js';
-import { Key } from '@nut-tree-fork/nut-js';
 
 export async function mouseMoveHandler(
   _: Electron.IpcMainInvokeEvent,
@@ -21,14 +19,14 @@ export async function mouseRightClickHandler() {
 }
 
 export async function keyboardTypeHandler(
-  _: Electron.IpcMainInvokeEvent,
+  e: Electron.IpcMainInvokeEvent,
   args: { text: string },
 ) {
   await keyboard.type(args.text);
 }
 
 export async function keyboardPressKeyHandler(
-  _: Electron.IpcMainInvokeEvent,
+  e: Electron.IpcMainInvokeEvent,
   args: { key: string },
 ) {
   const keys = args.key.split('+').map((key: string) => {

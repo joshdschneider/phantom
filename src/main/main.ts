@@ -21,6 +21,8 @@ import {
   DEFAULT_WINDOW_Y,
 } from './constants';
 import { handleShowContextMenu } from './handlers/menu';
+import { useBoltInputMonitor } from '@nut-tree/bolt';
+import { system, mouse, MouseUpEvent, MouseDownEvent } from '@nut-tree/nut-js';
 
 class AppUpdater {
   constructor() {
@@ -138,13 +140,6 @@ ipcMain.handle('resize-window', (event, args: { height: number }) => {
   }
 });
 
-app.on('window-all-closed', () => {
-  // Respect OSX convention of having application in memory
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
-
 // Handle for desktop sources
 ipcMain.handle('get-sources', getSourcesHandler);
 
@@ -157,6 +152,39 @@ ipcMain.handle('keyboard:press-key', keyboardPressKeyHandler);
 
 // Handle context menu
 ipcMain.handle('show-context-menu', handleShowContextMenu);
+
+// Handle window position
+ipcMain.handle('set-always-on-top', (_, args) => {
+  if (mainWindow) {
+    mainWindow.setAlwaysOnTop(args.alwaysOnTop);
+  }
+});
+
+// Monitor input events
+useBoltInputMonitor();
+
+ipcMain.handle('start-monitoring-input-events', () => {
+  system.startMonitoringInputEvents();
+});
+
+ipcMain.handle('stop-monitoring-input-events', () => {
+  system.stopMonitoringInputEvents();
+});
+
+mouse.on('mouseUp', (event: MouseUpEvent) => {
+  mainWindow?.webContents.send('mouse:up', event);
+});
+
+mouse.on('mouseDown', (event: MouseDownEvent) => {
+  mainWindow?.webContents.send('mouse:down', event);
+});
+
+app.on('window-all-closed', () => {
+  // Respect OSX convention of having application in memory
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
 
 // Cleanup on quit
 app.on('before-quit', () => {
