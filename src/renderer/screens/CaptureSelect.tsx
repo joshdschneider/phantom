@@ -16,7 +16,7 @@ export const CaptureSelect: React.FC<CaptureSelectProps> = ({ setStep }) => {
   }, []);
 
   const handleStep = () => {
-    setStep('home');
+    setStep('question');
   };
 
   return (
@@ -36,7 +36,7 @@ export const CaptureSelect: React.FC<CaptureSelectProps> = ({ setStep }) => {
               alignItems: 'center'
             }}
           >
-            <div>Task</div>
+            <div>Capture</div>
             <br />
             <button className="non-draggable" onClick={handleStep}>
               Back

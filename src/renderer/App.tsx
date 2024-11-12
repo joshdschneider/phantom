@@ -1,26 +1,36 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import './App.css';
+import { Answer } from './screens/Answer';
 import { Autocomplete } from './screens/Autocomplete';
-import { Chat } from './screens/Chat';
+import { CaptureSelect } from './screens/CaptureSelect';
+import { ErrorScreen } from './screens/Error';
+import { Question } from './screens/Question';
 import { TaskSelect } from './screens/TaskSelect';
 
 export interface AppProps {
   step: string;
-  setStep: (step: string) => void;
+  setStep: Dispatch<SetStateAction<string>>;
+  messages: string[];
+  setMessages: Dispatch<SetStateAction<string[]>>;
 }
 
 export default function App() {
-  const [step, setStep] = useState('home');
+  const [step, setStep] = useState('question');
   const [messages, setMessages] = useState<string[]>([]);
 
   const appProps: AppProps = {
     step,
-    setStep
+    setStep,
+    messages,
+    setMessages
   };
 
   switch (step) {
-    case 'home':
-      return <Chat {...appProps} />;
+    case 'question':
+      return <Question {...appProps} />;
+
+    case 'answer':
+      return <Answer {...appProps} />;
 
     case 'autocomplete':
       return <Autocomplete {...appProps} />;
@@ -28,7 +38,10 @@ export default function App() {
     case 'task':
       return <TaskSelect {...appProps} />;
 
+    case 'capture':
+      return <CaptureSelect {...appProps} />;
+
     default:
-      throw new Error('Invalid step');
+      return <ErrorScreen />;
   }
 }

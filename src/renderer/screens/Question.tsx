@@ -1,6 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
-import sfProFont from '../../assets/fonts/SF-Pro.ttf';
 import { AppProps } from '../App';
 import { ArrowRightIcon } from '../components/ArrowRightIcon';
 import { BoltIcon } from '../components/BoltIcon';
@@ -8,11 +7,10 @@ import { DotsIcon } from '../components/DotsIcon';
 import { InputIcon } from '../components/InputIcon';
 import { MicIcon } from '../components/MicIcon';
 import { ScreenshotIcon } from '../components/ScreenshotIcon';
-import './App.css';
 
-type ChatProps = AppProps & {};
+type QuestionProps = AppProps & {};
 
-export const Chat: React.FC<ChatProps> = ({ setStep }) => {
+export const Question: React.FC<QuestionProps> = ({ setStep, setMessages }) => {
   const [visible, setVisible] = useState(false);
   const [text, setText] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -20,12 +18,9 @@ export const Chat: React.FC<ChatProps> = ({ setStep }) => {
 
   useEffect(() => {
     window.electron.ipcRenderer.invoke('resize-window', { height: 100 });
-
     setTimeout(() => {
       setVisible(true);
     }, 150);
-
-    document.documentElement.style.setProperty('--sf-pro-font', `url(${sfProFont})`);
   }, []);
 
   useEffect(() => {
@@ -60,13 +55,15 @@ export const Chat: React.FC<ChatProps> = ({ setStep }) => {
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault(); // Prevent default to avoid new line
+      e.preventDefault();
       handleSubmit();
     }
   };
 
   const handleSubmit = async () => {
     setText('');
+    setMessages([text]);
+    setStep('answer');
   };
 
   const recordAudio = async () => {

@@ -1,10 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { AppProps } from '../App';
 
-type TaskSelectProps = AppProps & {};
-
-export const TaskSelect: React.FC<TaskSelectProps> = ({ setStep }) => {
+export const ErrorScreen: React.FC = () => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -14,10 +11,6 @@ export const TaskSelect: React.FC<TaskSelectProps> = ({ setStep }) => {
       setVisible(true);
     }, 150);
   }, []);
-
-  const handleStep = () => {
-    setStep('question');
-  };
 
   return (
     <AnimatePresence>
@@ -36,11 +29,7 @@ export const TaskSelect: React.FC<TaskSelectProps> = ({ setStep }) => {
               alignItems: 'center'
             }}
           >
-            <div>Task</div>
-            <br />
-            <button className="non-draggable" onClick={handleStep}>
-              Back
-            </button>
+            <div>Error</div>
           </motion.div>
         )}
       </main>

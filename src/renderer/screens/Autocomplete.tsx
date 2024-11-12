@@ -9,6 +9,7 @@ type AutocompleteProps = AppProps & {};
 
 export const Autocomplete: React.FC<AutocompleteProps> = ({ setStep }) => {
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [text, setText] = useState('Select an editable area on your screen');
 
   useEffect(() => {
@@ -66,12 +67,12 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({ setStep }) => {
             transition={{ duration: 0.6 }}
             className="base-container"
           >
-            <div className="autocomplete-container">
+            <div className={`autocomplete-container loading-background ${loading ? 'active' : ''}`}>
               <div className="autocomplete">
                 <p>
                   <TextStreamer text={text} />
                 </p>
-                <button className="cancel-button non-draggable" onClick={() => setStep('home')}>
+                <button className="cancel-button non-draggable" onClick={() => setStep('question')}>
                   <StopIcon />
                 </button>
               </div>
