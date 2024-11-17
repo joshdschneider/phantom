@@ -52,9 +52,14 @@ export const Answer: React.FC<AnswerProps> = ({ setStep }) => {
                   </button>
                 </div>
               ) : (
-                <div className="answer-loading">
+                <div className="answer-text">
                   <p>
-                    <TextStreamer text={'The answer is...'} />
+                    <TextStreamer
+                      text={
+                        'The animation now smoothly transitions from no dots to three dots and back to no dots, creating a more complete animation cycle.'
+                      }
+                      speed={200}
+                    />
                   </p>
                 </div>
               )}

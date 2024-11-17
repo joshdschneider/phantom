@@ -27,6 +27,7 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
+let settingsWindow: BrowserWindow | null = null;
 let windowAnimator: WindowAnimator | null = null;
 
 if (process.env.NODE_ENV === 'production') {
@@ -53,6 +54,54 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 
+const createSettingsWindow = async () => {
+  const RESOURCES_PATH = app.isPackaged
+    ? path.join(process.resourcesPath, 'assets')
+    : path.join(__dirname, '../../assets');
+
+  const getAssetPath = (...paths: string[]): string => {
+    return path.join(RESOURCES_PATH, ...paths);
+  };
+
+  settingsWindow = new BrowserWindow({
+    show: false,
+    frame: false,
+    movable: true,
+    width: 600,
+    height: 400,
+    transparent: true,
+    hasShadow: true,
+    closable: true,
+    icon: getAssetPath('icon.png'),
+    webPreferences: {
+      preload: app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../.erb/dll/preload.js')
+    }
+  });
+
+  settingsWindow.loadURL(resolveHtmlPath('settings/index.html'));
+
+  settingsWindow.on('ready-to-show', () => {
+    if (!settingsWindow) {
+      throw new Error('"settingsWindow" is not defined');
+    }
+
+    if (process.env.START_MINIMIZED) {
+      settingsWindow.minimize();
+    } else {
+      settingsWindow.show();
+    }
+  });
+
+  const menuBuilder = new MenuBuilder(settingsWindow);
+  menuBuilder.buildMenu();
+
+  // Open urls in the user's browser
+  settingsWindow.webContents.setWindowOpenHandler((edata) => {
+    shell.openExternal(edata.url);
+    return { action: 'deny' };
+  });
+};
+
 const createWindow = async () => {
   if (isDebug) {
     await installExtensions();
@@ -73,7 +122,7 @@ const createWindow = async () => {
     show: false,
     frame: false,
     movable: true,
-    resizable: false,
+    // resizable: false,
     width: DEFAULT_WINDOW_WIDTH,
     height: DEFAULT_WINDOW_HEIGHT,
     x: width - DEFAULT_WINDOW_WIDTH - DEFAULT_WINDOW_X,
