@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { DEFAULT_WINDOW_HEIGHT } from '../../main/constants';
 import { AppProps } from '../App';
 import { ArrowRightIcon } from '../components/ArrowRightIcon';
 import { BoltIcon } from '../components/BoltIcon';
@@ -17,7 +18,7 @@ export const Question: React.FC<QuestionProps> = ({ setStep, setMessages }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    window.electron.ipcRenderer.invoke('resize-window', { height: 100 });
+    window.electron.ipcRenderer.invoke('resize-window', { height: DEFAULT_WINDOW_HEIGHT });
     setTimeout(() => {
       setVisible(true);
     }, 150);
@@ -105,15 +106,12 @@ export const Question: React.FC<QuestionProps> = ({ setStep, setMessages }) => {
               <div className="feature-buttons">
                 <button className="non-draggable" onClick={() => setStep('capture')}>
                   <ScreenshotIcon />
-                  <span>Capture</span>
                 </button>
                 <button className="non-draggable" onClick={() => setStep('autocomplete')}>
                   <InputIcon />
-                  <span>Autocomplete</span>
                 </button>
                 <button className="non-draggable" onClick={() => setStep('task')}>
                   <BoltIcon />
-                  <span>Task</span>
                 </button>
               </div>
               <div className="context-menu">

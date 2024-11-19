@@ -1,6 +1,6 @@
 import { useBoltInputMonitor } from '@nut-tree/bolt';
 import { mouse, MouseDownEvent, MouseUpEvent, system } from '@nut-tree/nut-js';
-import { app, BrowserWindow, ipcMain, screen, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, nativeTheme, screen, shell } from 'electron';
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
@@ -122,17 +122,22 @@ const createWindow = async () => {
     show: false,
     frame: false,
     movable: true,
-    // resizable: false,
     width: DEFAULT_WINDOW_WIDTH,
     height: DEFAULT_WINDOW_HEIGHT,
     x: width - DEFAULT_WINDOW_WIDTH - DEFAULT_WINDOW_X,
     y: DEFAULT_WINDOW_Y,
-    transparent: true,
+    visualEffectState: 'active',
     hasShadow: true,
+    focusable: true,
+    vibrancy: 'menu',
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../.erb/dll/preload.js')
     }
+  });
+
+  mainWindow.on('blur', () => {
+    mainWindow?.setVibrancy('menu');
   });
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
@@ -198,6 +203,16 @@ ipcMain.handle('set-always-on-top', (_, args) => {
   if (mainWindow) {
     mainWindow.setAlwaysOnTop(args.alwaysOnTop);
   }
+});
+
+nativeTheme.on('updated', () => {
+  const isDark = nativeTheme.shouldUseDarkColors;
+  const theme = isDark ? 'dark' : 'light';
+  mainWindow?.webContents.send('theme-updated', { theme });
+});
+
+ipcMain.handle('get-theme', () => {
+  return nativeTheme.shouldUseDarkColors ? 'dark' : 'light';
 });
 
 // Monitor input events

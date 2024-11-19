@@ -13,7 +13,9 @@ export type Channel =
   | 'mouse:left-click'
   | 'mouse:right-click'
   | 'keyboard:type'
-  | 'keyboard:press-key';
+  | 'keyboard:press-key'
+  | 'get-theme'
+  | 'theme-updated';
 
 const electronHandler = {
   ipcRenderer: {

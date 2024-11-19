@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import './App.css';
 import { Answer } from './screens/Answer';
 import { Autocomplete } from './screens/Autocomplete';
@@ -15,6 +15,15 @@ export interface AppProps {
 }
 
 export default function App() {
+  useEffect(() => {
+    window.electron.ipcRenderer.invoke('get-theme').then((theme) => {
+      document.documentElement.setAttribute('data-theme', theme);
+    });
+    window.electron.ipcRenderer.on('theme-updated', (args: any) => {
+      document.documentElement.setAttribute('data-theme', args.theme);
+    });
+  }, []);
+
   const [step, setStep] = useState('question');
   const [messages, setMessages] = useState<string[]>([]);
 

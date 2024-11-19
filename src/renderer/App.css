@@ -1,7 +1,17 @@
 :root {
   --sf-pro-family: 'SF Pro';
+
+  /* Light theme */
   --placeholder-color: #606060;
   --text-color: #353535;
+  --background-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Dark theme */
+:root[data-theme='dark'] {
+  --placeholder-color: #ffffff;
+  --text-color: #ffffff;
+  --background-color: rgba(0, 0, 0, 0.25);
 }
 
 @font-face {
@@ -19,6 +29,7 @@ body {
   align-items: center;
   margin: 0;
   overflow: hidden;
+  background: var(--background-color);
 }
 
 .draggable {
@@ -45,7 +56,6 @@ body {
   align-items: center;
   width: 100vw;
   height: 100vh;
-  background-color: #ededed;
   margin: 0;
   padding: 0;
 }
@@ -54,10 +64,7 @@ body {
   display: block;
   width: calc(100% - 10px);
   margin: 5px;
-  border: 0.5px solid #ccc;
   height: 100%;
-  background: #dcdcdc;
-  border-radius: 7px;
   position: relative;
   overflow-y: auto;
 }
@@ -73,7 +80,7 @@ body {
   border: none;
   margin: 0;
   padding: 11px 40px 11px 11px;
-  font-size: 19px;
+  font-size: 17px;
   line-height: 1.4;
   font-family: var(--sf-pro-family);
   color: var(--text-color);
@@ -120,7 +127,7 @@ body {
 }
 
 .icon-button svg {
-  width: 13px;
+  width: 12px;
   height: auto;
   transition: 0.2s;
   color: #808080;
@@ -220,7 +227,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, #d3d3d3, #ededed, #dcdcdc);
+  /* background: linear-gradient(90deg, #d3d3d3, #ededed, #dcdcdc); */
   background-size: 200% 100%;
   animation: gradient 1s ease-in-out infinite alternate;
   opacity: 0;
