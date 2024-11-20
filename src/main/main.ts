@@ -13,6 +13,7 @@ import {
   mouseMoveHandler,
   mouseRightClickHandler
 } from './handlers/automation';
+import { monitorWindowHover } from './handlers/hover';
 import { handleShowContextMenu } from './handlers/menu';
 import { getSourcesHandler } from './handlers/sources';
 import MenuBuilder from './menu';
@@ -122,22 +123,19 @@ const createWindow = async () => {
     show: false,
     frame: false,
     movable: true,
+    fullscreenable: false,
+    resizable: false,
+    hasShadow: true,
     width: DEFAULT_WINDOW_WIDTH,
     height: DEFAULT_WINDOW_HEIGHT,
     x: width - DEFAULT_WINDOW_WIDTH - DEFAULT_WINDOW_X,
     y: DEFAULT_WINDOW_Y,
     visualEffectState: 'active',
-    hasShadow: true,
-    focusable: true,
     vibrancy: 'menu',
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../.erb/dll/preload.js')
     }
-  });
-
-  mainWindow.on('blur', () => {
-    mainWindow?.setVibrancy('menu');
   });
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
@@ -232,6 +230,16 @@ mouse.on('mouseUp', (event: MouseUpEvent) => {
 
 mouse.on('mouseDown', (event: MouseDownEvent) => {
   mainWindow?.webContents.send('mouse:down', event);
+});
+
+ipcMain.handle('start-monitoring-window-hover', () => {
+  if (mainWindow) {
+    monitorWindowHover(mainWindow);
+  }
+});
+
+ipcMain.handle('close-window', () => {
+  mainWindow?.close();
 });
 
 app.on('window-all-closed', () => {

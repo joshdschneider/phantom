@@ -15,7 +15,10 @@ export type Channel =
   | 'keyboard:type'
   | 'keyboard:press-key'
   | 'get-theme'
-  | 'theme-updated';
+  | 'theme-updated'
+  | 'start-monitoring-window-hover'
+  | 'window-hover'
+  | 'close-window';
 
 const electronHandler = {
   ipcRenderer: {

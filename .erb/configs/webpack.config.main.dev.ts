@@ -25,15 +25,15 @@ const configuration: webpack.Configuration = {
 
   entry: {
     main: path.join(webpackPaths.srcMainPath, 'main.ts'),
-    preload: path.join(webpackPaths.srcMainPath, 'preload.ts'),
+    preload: path.join(webpackPaths.srcMainPath, 'preload.ts')
   },
 
   output: {
     path: webpackPaths.dllPath,
     filename: '[name].bundle.dev.js',
     library: {
-      type: 'umd',
-    },
+      type: 'umd'
+    }
   },
 
   plugins: [
@@ -41,12 +41,12 @@ const configuration: webpack.Configuration = {
     // @ts-ignore
     new BundleAnalyzerPlugin({
       analyzerMode: process.env.ANALYZE === 'true' ? 'server' : 'disabled',
-      analyzerPort: 8888,
+      analyzerPort: 8888
     }),
 
     new webpack.DefinePlugin({
-      'process.type': '"browser"',
-    }),
+      'process.type': '"browser"'
+    })
   ],
 
   /**
@@ -56,8 +56,8 @@ const configuration: webpack.Configuration = {
    */
   node: {
     __dirname: false,
-    __filename: false,
-  },
+    __filename: false
+  }
 };
 
 export default merge(baseConfig, configuration);

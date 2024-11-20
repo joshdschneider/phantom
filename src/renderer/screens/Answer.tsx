@@ -1,7 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { AppProps } from '../App';
-import { StopIcon } from '../components/StopIcon';
 import { TextStreamer } from '../components/TextStreamer';
 
 type AnswerProps = AppProps & {};
@@ -47,9 +46,6 @@ export const Answer: React.FC<AnswerProps> = ({ setStep }) => {
                   <p>
                     <TextStreamer text={'Thinking'} ellipsis />
                   </p>
-                  <button className="cancel-button non-draggable" onClick={() => setStep('question')}>
-                    <StopIcon />
-                  </button>
                 </div>
               ) : (
                 <div className="answer-text">

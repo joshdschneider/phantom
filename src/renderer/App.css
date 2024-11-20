@@ -1,17 +1,11 @@
 :root {
   --sf-pro-family: 'SF Pro';
-
-  /* Light theme */
-  --placeholder-color: #606060;
-  --text-color: #353535;
-  --background-color: rgba(255, 255, 255, 0.25);
+  --placeholder-color: #808080;
+  --background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Dark theme */
 :root[data-theme='dark'] {
-  --placeholder-color: #ffffff;
-  --text-color: #ffffff;
-  --background-color: rgba(0, 0, 0, 0.25);
 }
 
 @font-face {
@@ -79,8 +73,8 @@ body {
   background: none;
   border: none;
   margin: 0;
-  padding: 11px 40px 11px 11px;
-  font-size: 17px;
+  padding: 11px 31px 11px 11px;
+  font-size: 16px;
   line-height: 1.4;
   font-family: var(--sf-pro-family);
   color: var(--text-color);
@@ -111,92 +105,93 @@ body {
 
 .icon-button {
   display: flex;
-  align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+  align-items: center;
+  background: transparent;
   border: none;
-  padding: 0;
-  background: none;
-  transition: 0.2s;
+  padding: 6px;
+  border-radius: 7px;
+  color: #414141;
 }
 
-.icon-button:hover svg {
-  color: var(--text-color);
+.icon-button:hover {
+  background: rgba(0, 0, 0, 0.08);
 }
 
 .icon-button svg {
-  width: 12px;
+  width: 20px;
   height: auto;
-  transition: 0.2s;
-  color: #808080;
 }
 
 .submit-button {
-  background: #007aff;
+  background: rgb(2, 133, 255);
+  color: white;
+  transition: 0.1s;
 }
 
-.submit-button svg {
-  color: white;
-  width: 17px;
-}
-
-.submit-button:hover svg {
-  color: white;
+.submit-button:hover {
+  background: rgb(2, 133, 255);
 }
 
 .submit-button:active {
-  background: #0064d1;
+  background: rgb(0, 122, 236);
+  transform: scale(0.95);
+}
+
+.submit-button[disabled] {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.submit-button svg {
+  width: 18px;
+  height: auto;
+}
+
+.close {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 5px;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.1s;
+}
+
+.close[aria-hidden='false'] {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.close-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  border: none;
+  margin: 0;
+  padding: 5px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.close-button svg {
+  width: 20px;
+  height: auto;
 }
 
 .controls {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 25px;
-  margin: 5px 10px;
-  padding-bottom: 5px;
+  margin: 1px 10px 10px 10px;
   gap: 2px;
   width: calc(100vw - 20px);
 }
 
-.feature-buttons {
+.controls-section {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 2px;
-}
-
-.feature-buttons button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: none;
-  border: none;
-  gap: 6px;
-  padding: 7px;
-  color: #606060;
-  font-family: 'SF Pro';
-  font-size: 14px;
-  transition: 0.2s;
-}
-
-.feature-buttons button:hover {
-  color: var(--text-color);
-}
-
-.stop-button {
-  background: #fe5f57;
-}
-
-.stop-button svg {
-  color: white;
-  width: 12px;
-}
-
-.stop-button:active {
-  background: #cf473f;
+  gap: 3px;
 }
 
 .context-menu {

@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
 import { AppProps } from '../App';
-import { StopIcon } from '../components/StopIcon';
 import { TextStreamer } from '../components/TextStreamer';
+import { UpArrowIcon } from '../components/UpArrowIcon';
 import { useElectronEvent } from '../hooks/useElectronEvent';
 
 type AutocompleteProps = AppProps & {};
@@ -73,7 +73,7 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({ setStep }) => {
                   <TextStreamer text={text} />
                 </p>
                 <button className="cancel-button non-draggable" onClick={() => setStep('question')}>
-                  <StopIcon />
+                  <UpArrowIcon />
                 </button>
               </div>
             </div>
