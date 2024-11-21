@@ -8,6 +8,7 @@ import { FastForwardIcon } from '../components/FastForwardIcon';
 import { MicIcon } from '../components/MicIcon';
 import { PlusIcon } from '../components/PlusIcon';
 import { UpArrowIcon } from '../components/UpArrowIcon';
+import { CaretCoordinates, useCaretPosition } from '../hooks/useCaretPosition';
 
 type QuestionProps = AppProps & {};
 
@@ -16,7 +17,11 @@ export const Question: React.FC<QuestionProps> = ({ setStep, setMessages }) => {
   const [text, setText] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const caretRef = useRef<HTMLDivElement>(null);
   const [windowHover, setWindowHover] = useState(false);
+  const [voiceRecording, setVoiceRecording] = useState(false);
+  const getCaretPosition = useCaretPosition(textareaRef);
+  const [coordinates, setCoordinates] = useState<CaretCoordinates | null>(null);
 
   useEffect(() => {
     window.electron.ipcRenderer.invoke('resize-window', { height: DEFAULT_WINDOW_HEIGHT });
@@ -63,6 +68,17 @@ export const Question: React.FC<QuestionProps> = ({ setStep, setMessages }) => {
 
   const handleInput = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
+
+    if (textareaRef.current) {
+      const position = textareaRef.current.selectionStart;
+      const coordinates = getCaretPosition(position);
+      if (coordinates) {
+        setCoordinates({
+          ...coordinates,
+          top: coordinates.top - 2
+        });
+      }
+    }
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -76,6 +92,34 @@ export const Question: React.FC<QuestionProps> = ({ setStep, setMessages }) => {
     setText('');
     setMessages([text]);
     setStep('answer');
+  };
+
+  const handleFocus = () => {
+    if (caretRef.current) {
+      caretRef.current.style.display = 'block';
+    }
+  };
+
+  const handleBlur = () => {
+    if (caretRef.current) {
+      caretRef.current.style.display = 'none';
+    }
+  };
+
+  const handleClick = () => {
+    const start = textareaRef.current?.selectionStart;
+    const end = textareaRef.current?.selectionEnd;
+    if (start !== undefined && end !== undefined && start === end && getCaretPosition) {
+      const coordinates = getCaretPosition(start);
+      if (coordinates) {
+        setCoordinates({
+          ...coordinates,
+          top: coordinates.top - 2
+        });
+      }
+    } else {
+      setCoordinates(null);
+    }
   };
 
   const recordAudio = async () => {
@@ -98,8 +142,19 @@ export const Question: React.FC<QuestionProps> = ({ setStep, setMessages }) => {
                 value={text}
                 onChange={handleInput}
                 onKeyDown={handleKeyDown}
+                onClick={handleClick}
                 rows={1}
                 placeholder="What can I help with?"
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+              />
+              <div
+                ref={caretRef}
+                className="custom-caret"
+                style={{
+                  top: coordinates?.top,
+                  left: coordinates?.left
+                }}
               />
             </div>
             <div className="controls">
@@ -115,7 +170,12 @@ export const Question: React.FC<QuestionProps> = ({ setStep, setMessages }) => {
                 </button>
               </div>
               <div className="controls-section">
-                <button className="icon-button non-draggable" style={{ marginRight: '5px' }}>
+                <button
+                  className="icon-button non-draggable"
+                  data-pressed={voiceRecording}
+                  style={{ marginRight: '5px' }}
+                  onClick={() => setVoiceRecording(!voiceRecording)}
+                >
                   <MicIcon />
                 </button>
                 <button className="icon-button submit-button non-draggable" disabled={text.length === 0}>

@@ -56,16 +56,17 @@ body {
 
 .input-container {
   display: block;
+  position: relative;
   width: calc(100% - 10px);
   margin: 5px;
   height: 100%;
-  position: relative;
   overflow-y: auto;
 }
 
 .input-container textarea {
   display: flex;
   flex-direction: column;
+  position: relative;
   box-sizing: border-box;
   width: 100%;
   height: auto;
@@ -73,11 +74,13 @@ body {
   background: none;
   border: none;
   margin: 0;
+  white-space: pre-wrap;
   padding: 11px 31px 11px 11px;
   font-size: 16px;
   line-height: 1.4;
   font-family: var(--sf-pro-family);
   color: var(--text-color);
+  caret-color: transparent;
   resize: none;
 }
 
@@ -85,6 +88,30 @@ body {
 .input-container textarea::-webkit-input-placeholder {
   color: var(--placeholder-color);
   -webkit-text-fill-color: var(--placeholder-color);
+}
+
+.custom-caret {
+  display: none;
+  position: absolute;
+  background-color: rgba(2, 133, 255, 0.9);
+  width: 2px;
+  border-radius: 10px;
+  height: 1.3em;
+  pointer-events: none;
+  z-index: 2;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -123,6 +150,11 @@ body {
   height: auto;
 }
 
+.icon-button[data-pressed='true'] {
+  background-color: rgb(189, 220, 244);
+  color: rgb(2, 133, 255);
+}
+
 .submit-button {
   background: rgb(2, 133, 255);
   color: white;
@@ -139,12 +171,12 @@ body {
 }
 
 .submit-button[disabled] {
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.1);
+  color: #414141;
 }
 
-.submit-button svg {
-  width: 18px;
-  height: auto;
+.submit-button[disabled]:active {
+  transform: none;
 }
 
 .close {
