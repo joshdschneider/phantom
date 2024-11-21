@@ -60,26 +60,73 @@ export class WindowAnimator {
   private startAnimation(): void {
     const update = () => {
       const currentTime = Date.now();
-      const deltaTime = (currentTime - this.lastTime) / 1000; // Convert to seconds
+      const deltaTime = (currentTime - this.lastTime) / 1000;
       this.lastTime = currentTime;
 
+      // Physics calculations
       const displacement = this.currentHeight - this.targetHeight;
       const springForce = -this.config.stiffness * displacement;
-
       const dampingForce = -this.config.damping * this.velocity;
       const acceleration = (springForce + dampingForce) / this.config.mass;
 
       this.velocity += acceleration * deltaTime;
       this.currentHeight += this.velocity * deltaTime;
-      this.window.setSize(this.window.getSize()[0], Math.round(this.currentHeight));
 
+      // Get current window metrics
+      const [currentX, currentY] = this.window.getPosition();
+      const [currentWidth, oldHeight] = this.window.getSize();
+      const newHeight = Math.round(this.currentHeight);
+
+      // Get screen metrics
+      const screen = require('electron').screen;
+      const display = screen.getDisplayMatching({
+        x: currentX,
+        y: currentY,
+        width: currentWidth,
+        height: oldHeight
+      });
+
+      // Calculate distances to screen edges
+      const distanceToTop = currentY;
+      const distanceToBottom = display.workArea.height - (currentY + oldHeight);
+
+      // Determine whether to extend from top or bottom
+      if (distanceToTop < distanceToBottom) {
+        // Extend from bottom (maintain top position)
+        this.window.setBounds({
+          x: currentX,
+          y: currentY,
+          width: currentWidth,
+          height: newHeight
+        });
+      } else {
+        // Extend from top (adjust y position to maintain bottom position)
+        const newY = currentY - (newHeight - oldHeight);
+        this.window.setBounds({
+          x: currentX,
+          y: newY,
+          width: currentWidth,
+          height: newHeight
+        });
+      }
+
+      // Check if animation should continue
       const isMoving = Math.abs(this.velocity) > this.config.precision;
       const isAtTarget = Math.abs(displacement) > this.config.precision;
 
       if (isMoving || isAtTarget) {
-        this.animationFrameId = setTimeout(update, 1000 / 60); // Target 60 FPS
+        this.animationFrameId = setTimeout(update, 1000 / 60);
       } else {
-        this.window.setSize(this.window.getSize()[0], Math.round(this.targetHeight));
+        // Final position adjustment
+        const finalY = distanceToTop < distanceToBottom ? currentY : currentY - (this.targetHeight - oldHeight);
+
+        this.window.setBounds({
+          x: currentX,
+          y: finalY,
+          width: currentWidth,
+          height: Math.round(this.targetHeight)
+        });
+
         this.currentHeight = this.targetHeight;
         this.velocity = 0;
         this.animationFrameId = null;

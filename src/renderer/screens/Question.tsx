@@ -85,6 +85,22 @@ export const Question: React.FC<QuestionProps> = ({ setStep, setMessages }) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSubmit();
+      return;
+    }
+
+    if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      requestAnimationFrame(() => {
+        if (textAreaRef.current) {
+          const position = textAreaRef.current.selectionStart;
+          const coordinates = getCaretPosition(position);
+          if (coordinates) {
+            setCoordinates({
+              ...coordinates,
+              top: coordinates.top - 2
+            });
+          }
+        }
+      });
     }
   };
 
@@ -142,6 +158,7 @@ export const Question: React.FC<QuestionProps> = ({ setStep, setMessages }) => {
                 value={text}
                 onChange={handleInput}
                 onKeyDown={handleKeyDown}
+                // onKeyUp={handleKeyUp}
                 onClick={handleClick}
                 rows={1}
                 placeholder="What can I help with?"

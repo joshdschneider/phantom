@@ -127,18 +127,17 @@ body {
   height: 1.3em;
   pointer-events: none;
   z-index: 2;
-  animation: blink 1s infinite;
+  animation: blink 1.1s ease-in-out infinite;
 }
 
 @keyframes blink {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
+  0%,
+  65%,
   100% {
     opacity: 1;
+  }
+  80% {
+    opacity: 0;
   }
 }
 
