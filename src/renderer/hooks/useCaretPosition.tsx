@@ -34,20 +34,31 @@ export interface CaretCoordinates {
   left: number;
 }
 
-export const useCaretPosition = (textAreaRef: React.RefObject<HTMLTextAreaElement>) => {
+export interface UseCaretPositionProps {
+  textAreaRef: React.RefObject<HTMLTextAreaElement>;
+  mountToElementId?: string;
+  mounted?: boolean;
+}
+
+export const useCaretPosition = ({ textAreaRef, mounted, mountToElementId }: UseCaretPositionProps) => {
   const mirrorRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    if (mounted === false) {
+      return;
+    }
+
     if (!mirrorRef.current) {
       const div = document.createElement('div');
-      document.body.appendChild(div);
+      const parentElement = mountToElementId ? document.getElementById(mountToElementId) : document.body;
+      parentElement?.appendChild(div);
       mirrorRef.current = div;
     }
 
     return () => {
       mirrorRef.current?.remove();
     };
-  }, []);
+  }, [mounted, mountToElementId]);
 
   const getCaretPosition = (position: number): CaretCoordinates | null => {
     if (!textAreaRef.current || !mirrorRef.current) {

@@ -15,12 +15,12 @@ type QuestionProps = AppProps & {};
 export const Question: React.FC<QuestionProps> = ({ setStep, setMessages }) => {
   const [visible, setVisible] = useState(false);
   const [text, setText] = useState('');
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const caretRef = useRef<HTMLDivElement>(null);
   const [windowHover, setWindowHover] = useState(false);
   const [voiceRecording, setVoiceRecording] = useState(false);
-  const getCaretPosition = useCaretPosition(textareaRef);
+  const getCaretPosition = useCaretPosition({ textAreaRef, mounted: visible, mountToElementId: 'input' });
   const [coordinates, setCoordinates] = useState<CaretCoordinates | null>(null);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export const Question: React.FC<QuestionProps> = ({ setStep, setMessages }) => {
   }, []);
 
   useEffect(() => {
-    const textarea = textareaRef.current;
+    const textarea = textAreaRef.current;
     const container = containerRef.current;
     if (textarea && container) {
       textarea.style.height = 'auto';
@@ -69,8 +69,8 @@ export const Question: React.FC<QuestionProps> = ({ setStep, setMessages }) => {
   const handleInput = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
 
-    if (textareaRef.current) {
-      const position = textareaRef.current.selectionStart;
+    if (textAreaRef.current) {
+      const position = textAreaRef.current.selectionStart;
       const coordinates = getCaretPosition(position);
       if (coordinates) {
         setCoordinates({
@@ -107,8 +107,8 @@ export const Question: React.FC<QuestionProps> = ({ setStep, setMessages }) => {
   };
 
   const handleClick = () => {
-    const start = textareaRef.current?.selectionStart;
-    const end = textareaRef.current?.selectionEnd;
+    const start = textAreaRef.current?.selectionStart;
+    const end = textAreaRef.current?.selectionEnd;
     if (start !== undefined && end !== undefined && start === end && getCaretPosition) {
       const coordinates = getCaretPosition(start);
       if (coordinates) {
@@ -136,9 +136,9 @@ export const Question: React.FC<QuestionProps> = ({ setStep, setMessages }) => {
             exit={{ opacity: 0 }}
             className="base-container"
           >
-            <div className="input-container non-draggable" ref={containerRef}>
+            <div id="input" className="input-container non-draggable" ref={containerRef}>
               <textarea
-                ref={textareaRef}
+                ref={textAreaRef}
                 value={text}
                 onChange={handleInput}
                 onKeyDown={handleKeyDown}

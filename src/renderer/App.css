@@ -1,11 +1,39 @@
 :root {
   --sf-pro-family: 'SF Pro';
-  --placeholder-color: #808080;
   --background-color: rgba(255, 255, 255, 0.1);
+  --text-color: #202020;
+  --placeholder-color: #6e6e6e;
+  --icon-color: #414141;
+  --icon-background: transparent;
+  --icon-background-hover: rgba(0, 0, 0, 0.08);
+  --button-background: rgb(2, 133, 255);
+  --button-background-active: rgb(0, 122, 236);
+  --button-background-disabled: rgba(0, 0, 0, 0.1);
+  --button-background-pressed: rgb(189, 220, 244);
+  --button-text: white;
+  --button-text-disabled: #414141;
+  --button-text-pressed: rgb(2, 133, 255);
+  --caret-color: rgba(2, 133, 255, 0.9);
+  --close-color: rgba(0, 0, 0, 0.5);
+  --close-color-hover: rgba(0, 0, 0, 0.8);
 }
 
 /* Dark theme */
 :root[data-theme='dark'] {
+  --background-color: rgba(0, 0, 0, 0.3);
+  --text-color: #f0f0f0;
+  --placeholder-color: #939393;
+  --icon-color: #bfbfbf;
+  --icon-background-hover: rgba(255, 255, 255, 0.08);
+  --button-background: rgb(27, 145, 255);
+  --button-background-active: rgb(18, 128, 231);
+  --button-background-disabled: rgba(255, 255, 255, 0.1);
+  --button-background-pressed: rgb(26, 65, 106);
+  --button-text-disabled: #bfbfbf;
+  --button-text-pressed: rgb(72, 170, 255);
+  --caret-color: rgba(72, 170, 255, 0.9);
+  --close-color: rgba(255, 255, 255, 0.5);
+  --close-color-hover: rgba(255, 255, 255, 0.8);
 }
 
 @font-face {
@@ -93,7 +121,7 @@ body {
 .custom-caret {
   display: none;
   position: absolute;
-  background-color: rgba(2, 133, 255, 0.9);
+  background-color: var(--caret-color);
   width: 2px;
   border-radius: 10px;
   height: 1.3em;
@@ -114,9 +142,6 @@ body {
   }
 }
 
-@media (prefers-color-scheme: dark) {
-}
-
 .input-container textarea:focus {
   outline: none;
 }
@@ -134,15 +159,15 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: transparent;
   border: none;
   padding: 6px;
   border-radius: 7px;
-  color: #414141;
+  background: var(--icon-background);
+  color: var(--icon-color);
 }
 
 .icon-button:hover {
-  background: rgba(0, 0, 0, 0.08);
+  background: var(--icon-background-hover);
 }
 
 .icon-button svg {
@@ -151,28 +176,28 @@ body {
 }
 
 .icon-button[data-pressed='true'] {
-  background-color: rgb(189, 220, 244);
-  color: rgb(2, 133, 255);
+  background-color: var(--button-background-pressed);
+  color: var(--button-text-pressed);
 }
 
 .submit-button {
-  background: rgb(2, 133, 255);
-  color: white;
+  background: var(--button-background);
+  color: var(--button-text);
   transition: 0.1s;
 }
 
 .submit-button:hover {
-  background: rgb(2, 133, 255);
+  background: var(--button-background);
 }
 
 .submit-button:active {
-  background: rgb(0, 122, 236);
+  background: var(--button-background-active);
   transform: scale(0.95);
 }
 
 .submit-button[disabled] {
-  background: rgba(0, 0, 0, 0.1);
-  color: #414141;
+  background: var(--button-background-disabled);
+  color: var(--button-text-disabled);
 }
 
 .submit-button[disabled]:active {
@@ -203,7 +228,12 @@ body {
   border: none;
   margin: 0;
   padding: 5px;
-  color: rgba(0, 0, 0, 0.5);
+  color: var(--close-color);
+  transition: 0.1s;
+}
+
+.close-button:hover {
+  color: var(--close-color-hover);
 }
 
 .close-button svg {
